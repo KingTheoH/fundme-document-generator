@@ -36,11 +36,11 @@ const DEFAULT_PROFILE: Profile = {
   footerNote: "FundMe.ph — The place for those who care.",
 };
 
-function defaultDonor(profile: Profile): DonorReceiptData {
+function defaultDonor(profile: Profile, seq?: number): DonorReceiptData {
   const today = todayISO();
-  const seq = peekNextSequence("donor");
+  const s = seq ?? peekNextSequence("donor");
   return {
-    receiptId: generateReceiptId("donor", profile.shortCode, today, seq),
+    receiptId: generateReceiptId("donor", profile.shortCode, today, s),
     idMode: "auto",
     receiptDate: today,
     donorName: "",
@@ -58,11 +58,11 @@ function defaultDonor(profile: Profile): DonorReceiptData {
   };
 }
 
-function defaultPayout(profile: Profile): PayoutReceiptData {
+function defaultPayout(profile: Profile, seq?: number): PayoutReceiptData {
   const today = todayISO();
-  const seq = peekNextSequence("payout");
+  const s = seq ?? peekNextSequence("payout");
   return {
-    receiptId: generateReceiptId("payout", profile.shortCode, today, seq),
+    receiptId: generateReceiptId("payout", profile.shortCode, today, s),
     idMode: "auto",
     payoutDate: today,
     fundName: "",
@@ -80,8 +80,10 @@ function defaultPayout(profile: Profile): PayoutReceiptData {
 export default function Home() {
   const [docType, setDocType] = useState<DocumentType>("donor");
   const [profile, setProfile] = useState<Profile>(DEFAULT_PROFILE);
-  const [donorData, setDonorData] = useState<DonorReceiptData>(defaultDonor(DEFAULT_PROFILE));
-  const [payoutData, setPayoutData] = useState<PayoutReceiptData>(defaultPayout(DEFAULT_PROFILE));
+  // seq=1 keeps the initial render stable (same on server + client); useEffect will
+  // overwrite with the real localStorage sequence once the component mounts.
+  const [donorData, setDonorData] = useState<DonorReceiptData>(defaultDonor(DEFAULT_PROFILE, 1));
+  const [payoutData, setPayoutData] = useState<PayoutReceiptData>(defaultPayout(DEFAULT_PROFILE, 1));
   const [history, setHistory] = useState<ReceiptHistoryEntry[]>([]);
   const [profileOpen, setProfileOpen] = useState(true);
   const [historyOpen, setHistoryOpen] = useState(false);
@@ -91,11 +93,11 @@ export default function Home() {
 
   useEffect(() => {
     const saved = loadProfile();
-    if (saved) {
-      setProfile(saved);
-      setDonorData(defaultDonor(saved));
-      setPayoutData(defaultPayout(saved));
-    }
+    const p = saved ?? DEFAULT_PROFILE;
+    if (saved) setProfile(saved);
+    // Re-initialize with real localStorage sequences now that we're on the client.
+    setDonorData(defaultDonor(p));
+    setPayoutData(defaultPayout(p));
     setHistory(loadHistory());
   }, []);
 
