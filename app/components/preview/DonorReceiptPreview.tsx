@@ -21,7 +21,7 @@ export default function DonorReceiptPreview({ data, profile }: Props) {
     <div
       id="receipt-preview"
       className="bg-white w-full max-w-[680px] mx-auto"
-      style={{ fontFamily: "Lato, sans-serif", paddingRight: "10px", paddingBottom: "6px" }}
+      style={{ fontFamily: "Lato, sans-serif", padding: "10px 10px 6px 10px" }}
     >
       {/* Header */}
       <div className="border-b-2 border-[#096651] pb-5 mb-6">
