@@ -21,7 +21,7 @@ export default function DonorReceiptPreview({ data, profile }: Props) {
     <div
       id="receipt-preview"
       className="bg-white w-full max-w-[680px] mx-auto"
-      style={{ fontFamily: "Lato, sans-serif" }}
+      style={{ fontFamily: "Lato, sans-serif", paddingRight: "10px", paddingBottom: "6px" }}
     >
       {/* Header */}
       <div className="border-b-2 border-[#096651] pb-5 mb-6">
@@ -104,7 +104,7 @@ export default function DonorReceiptPreview({ data, profile }: Props) {
           <tbody>
             <tr className="border-b border-gray-100">
               <td className="py-2.5 text-sm text-gray-600">Gross Donation</td>
-              <td className="py-2.5 text-sm font-medium text-gray-900 text-right">
+              <td className="py-2.5 text-sm font-medium text-gray-900 text-right pr-1">
                 {formatPHP(gross)}
               </td>
             </tr>
@@ -117,13 +117,13 @@ export default function DonorReceiptPreview({ data, profile }: Props) {
                   </span>
                 )}
               </td>
-              <td className="py-2.5 text-sm text-gray-600 text-right">
+              <td className="py-2.5 text-sm text-gray-600 text-right pr-1">
                 ({formatPHP(fee)})
               </td>
             </tr>
             <tr>
               <td className="pt-3 pb-1 text-sm font-bold text-gray-900">Net to Organization</td>
-              <td className="pt-3 pb-1 text-base font-bold text-[#096651] text-right">
+              <td className="pt-3 pb-1 text-base font-bold text-[#096651] text-right pr-1">
                 {formatPHP(net)}
               </td>
             </tr>
